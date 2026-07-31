@@ -1,20 +1,34 @@
 # selenium-gost-browser
-Implementation of Selenium browsers with support for GOST encryption
 
-Selenium WebDriver is a tool for automating web browser actions. It's primarily used for testing web applications, but it's not limited to that.
+Реализация браузеров для Selenium с поддержкой шифрования по ГОСТ.
 
-There's a limited selection of browsers that are already packaged in Docker images and available for out-of-the-box deployment: Firefox, Chrome, Opera, and Edge.
+[Selenium](https://github.com/SeleniumHQ/selenium)  WebDriver — это инструмент для автоматизации действий в веб‑браузере. Чаще всего его используют для тестирования веб‑приложений.
 
-### Usage
+В Selenium Docker существует ограниченный набор браузеров, которые уже упакованы в готовые образы и доступны для запуска “из коробки”: Firefox, Chrome, Opera и Edge.
 
-`git clone https://github.com/KubLda/selenium-gost-browser`
+## Использование
 
-`cd selenium-gost-browser`
+1) Склонируйте репозиторий:
 
-**NodeChromium or NodeYandex**
+```bash
+git clone https://github.com/KubLda/selenium-gost-browser
+cd selenium-gost-browser
+```
 
-`cd NodeChromium`
+2) Перейдите в нужный каталог (пример: **NodeChromium / NodeYandex**):
 
-`docker build -t node-chromium:146 ./NodeChromiumGost/`
+```bash
+cd NodeChromium
+```
 
-`docker compose up -d`
+3) Соберите Docker-образ:
+
+```bash
+docker build -t node-chromium:146 ./NodeChromiumGost/
+```
+
+4) Запустите контейнер:
+
+```bash
+docker compose up -d
+```
