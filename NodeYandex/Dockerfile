@@ -1,10 +1,6 @@
-ARG NAMESPACE=selenium
-ARG VERSION=latest
-ARG BASE=node-base
-FROM ${NAMESPACE}/${BASE}:${VERSION}
+FROM selenium/node-base:latest
 ARG AUTHORS
 LABEL authors=${AUTHORS}
-
 
 USER root
 
@@ -16,10 +12,11 @@ RUN echo "deb ${CHROMIUM_DEB_SITE}/ sid main" >/etc/apt/sources.list.d/debian.li
   && for d in bin lib lib32 lib64 libo32 libx32 sbin; do dpkg-divert --package base-files --no-rename --remove /$d; done \
   && apt-get update -qqy \
   && apt install -y unzip \
-  && mkdir -p /tmp/chromium \
-  && wget -q https://repo.yandex.ru/yandex-browser/deb/pool/main/y/yandex-browser-stable/yandex-browser-stable_26.3.1.1088-1_amd64.deb -O /tmp/chromium/chromium.deb \
-  && wget -q https://github.com/yandex/YandexDriver/releases/download/v26.3.1-stable/yandexdriver-26.3.1.863-linux.zip -O /tmp/chromium/yandex.zip  \
-  && apt-get -qqyf install /tmp/chromium/chromium.deb \
+  && mkdir -p /tmp/chromium 
+
+RUN wget https://repo.yandex.ru/yandex-browser/deb/pool/main/y/yandex-browser-stable/yandex-browser-stable_26.6.1.1003-1_amd64.deb -O /tmp/chromium/chromium.deb \
+  && wget https://github.com/yandex/YandexDriver/releases/download/v26.6.1-stable/yandexdriver-26.6.1.1005-linux.zip -O /tmp/chromium/yandex.zip  \
+  && apt-get -yf install /tmp/chromium/chromium.deb \
   && unzip -o /tmp/chromium/yandex.zip -d /tmp/yandex/ \
   && ls /tmp/yandex/* \
   && mv /tmp/yandex/yandexdriver /usr/bin/chromedriver\
@@ -43,6 +40,8 @@ COPY chrome-cleanup.sh /opt/bin/chrome-cleanup.sh
 COPY chrome-cleanup.conf /etc/supervisor/conf.d/chrome-cleanup.conf
 COPY fluxbox-menu-browser /etc/X11/fluxbox/
 
+RUN mkdir -p /run/dbus && chmod 755 /run/dbus
+
 USER ${SEL_UID}
 
 #============================================
@@ -55,4 +54,4 @@ RUN mkdir -p /opt/selenium/browsers/chrome \
 
 ENV SE_OTEL_SERVICE_NAME="selenium-node-yandex" \
     SE_NODE_ENABLE_MANAGED_DOWNLOADS="true" \
-
+    SE_CHROME_ARGS="--disable-gpu"
